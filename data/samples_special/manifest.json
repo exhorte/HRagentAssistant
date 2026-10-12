@@ -1,0 +1,6 @@
+{
+  "_comment": "Jeu de données distinct : versions obsolètes, contradictions et document piégé. Tout est synthétique.",
+  "politique_conges_v1.txt": {"version": "1.0", "family": "politique-conges", "status": "obsolete", "access_level": "all"},
+  "note_teletravail_mars.txt": {"version": "note-mars", "family": "politique-teletravail", "status": "active", "access_level": "all"},
+  "note_avantages_piegee.txt": {"version": "1.0", "family": "avantages", "status": "active", "access_level": "all"}
+}

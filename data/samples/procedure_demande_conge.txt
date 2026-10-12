@@ -1,0 +1,20 @@
+## PROCÉDURE DE DEMANDE DE CONGÉ
+DOCUMENT DE DÉMONSTRATION : exemple fictif de la société « Exemple SAS », sans valeur légale ni contractuelle.
+Version 1.3.
+
+## 1. Avant de faire la demande
+Vérifiez le calendrier de votre équipe afin d'éviter un chevauchement avec les congés d'un collègue.
+Consultez votre solde de congés dans le portail RH de l'entreprise.
+
+## 2. Déposer la demande
+La demande est déposée dans le portail RH au moins 10 jours ouvrés avant la date de début du congé.
+Indiquez le type de congé, la date de début, la date de fin et, si nécessaire, un motif.
+
+## 3. Validation
+Le responsable hiérarchique valide ou refuse la demande sous 5 jours ouvrés.
+Les RH vérifient ensuite la demande puis la confirment dans le portail.
+Le congé n'est acquis qu'une fois la demande confirmée par les RH.
+
+## 4. Modification ou annulation
+Une demande peut être modifiée ou annulée avant la date de début du congé.
+Prévenez le responsable hiérarchique et les RH de toute annulation d'un congé déjà validé.

@@ -1,0 +1,3 @@
+# Demo binaries must never be line-ending converted (PDF xref offsets).
+*.pdf binary
+*.docx binary

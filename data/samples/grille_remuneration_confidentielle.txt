@@ -1,0 +1,11 @@
+## GRILLE DE RÉMUNÉRATION : CONFIDENTIEL RH
+DOCUMENT DE DÉMONSTRATION : données entièrement fictives, réservées au rôle responsable RH.
+Version 1.0.
+
+## 1. Niveaux de rémunération
+Niveau A (assistant) : de 28 000 à 34 000 euros bruts annuels.
+Niveau B (chargé) : de 34 000 à 45 000 euros bruts annuels.
+Niveau C (responsable) : de 45 000 à 62 000 euros bruts annuels.
+
+## 2. Primes
+La prime d'objectifs peut atteindre 8 % du salaire annuel brut et est décidée par la direction des ressources humaines.

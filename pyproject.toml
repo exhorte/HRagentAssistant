@@ -1,7 +1,55 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "hragentassistant"
 version = "0.1.0"
-description = "Add your description here"
+description = "Assistant RH documentaire (RAG sourcé), workflow de demande de congé et transfert aux RH - prototype local"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "python-dotenv>=1.0",
+    "numpy>=1.26",
+    # LangChain building blocks actually used (Document, splitters, Qdrant store, chat models)
+    "langchain-core>=0.3",
+    "langchain-text-splitters>=0.3",
+    "langchain-qdrant>=0.2",
+    "qdrant-client>=1.9",
+    "langchain-groq>=0.3",
+    "langchain-openai>=0.3",
+    # LLM gateway (optional at runtime, see LLM_PROVIDER)
+    "portkey-ai>=1.0",
+    # Jina embeddings client (optional at runtime, see EMBEDDING_BACKEND)
+    "httpx>=0.27",
+    # UI
+    "streamlit>=1.40",
+    # Document extraction
+    "pypdf>=4.0",
+    "python-docx>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+# LangSmith / openevals LLM-as-judge evaluation (hr_assistant.evaluation.run_langsmith_evaluation)
+eval = [
+    "langsmith>=0.3",
+    "openevals>=0.1",
+]
+notebook = [
+    "jupyter",
+    "ipykernel",
+]
+
+[tool.setuptools]
+packages = ["hr_assistant"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = [
+    "security: critical security tests (blocking for any professional use)",
+    "integration: end-to-end flows on the demo corpus (offline, deterministic)",
+]

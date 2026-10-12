@@ -23,6 +23,9 @@ env/
 # --- Local vector store (migrated to Qdrant Cloud) ---
 data/faiss_index/
 
+# --- Runtime data: SQLite DB, uploaded files, local Qdrant index, demo credentials ---
+data/runtime/
+
 # --- Runtime output ---
 logs/
 *.log

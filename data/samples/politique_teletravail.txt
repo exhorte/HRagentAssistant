@@ -1,0 +1,21 @@
+## POLITIQUE DE TÉLÉTRAVAIL
+DOCUMENT DE DÉMONSTRATION : exemple fictif de la société « Exemple SAS », sans valeur légale ni contractuelle.
+Version 1.1.
+
+## 1. Éligibilité
+Le télétravail est ouvert aux salariés ayant plus de 3 mois d'ancienneté, dont le poste est compatible, après accord du responsable hiérarchique.
+
+## 2. Rythme
+Le télétravail est limité à 2 jours par semaine.
+Les jours télétravaillés sont convenus avec le responsable et l'équipe.
+
+## 3. Disponibilité
+Le salarié en télétravail est joignable pendant les plages horaires de 10 h à 16 h.
+
+## 4. Équipement et indemnité
+L'entreprise fournit un ordinateur portable.
+Une indemnité forfaitaire de 10 euros par mois est versée aux salariés qui télétravaillent au moins un jour par semaine.
+
+## 5. Sécurité des données
+La connexion au VPN de l'entreprise est obligatoire.
+Les documents confidentiels ne sont pas imprimés à domicile.

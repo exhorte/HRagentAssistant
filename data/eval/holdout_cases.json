@@ -1,0 +1,36 @@
+{
+  "_comment": "Jeu 'hors calibration' : écrit AVANT le dernier réglage de la normalisation lexicale, exécuté une seule fois ensuite. Même corpus que hr_eval_cases.json. Les échecs sont conservés tels quels.",
+  "cases": [
+    {"id": "hold-01", "category": "simple", "question": "Combien de jours de congés suis-je en droit de prendre par année ?",
+     "expected_status": "answered", "expected_documents": ["politique_conges.txt"], "must_contain": ["25"]},
+    {"id": "hold-02", "category": "simple", "question": "Quelle est la durée de la formation sécurité obligatoire ?",
+     "expected_status": "answered", "expected_documents": ["procedure_integration.docx"], "must_contain": ["45 minutes"]},
+    {"id": "hold-03", "category": "simple", "question": "Quelle est la durée maximale d'un congé sans solde par an ?",
+     "expected_status": "answered", "expected_documents": ["politique_conges.txt"], "must_contain": ["30 jours"]},
+    {"id": "hold-04", "category": "simple", "question": "Faut-il l'accord du manager pour télétravailler ?",
+     "expected_status": "answered", "expected_documents": ["politique_teletravail.txt"], "must_contain": ["accord"]},
+    {"id": "hold-05", "category": "simple", "question": "Où dépose-t-on une demande d'attestation ?",
+     "expected_status": "answered", "expected_documents": ["procedure_attestation.pdf"], "must_contain": ["portail"]},
+    {"id": "hold-06", "category": "simple", "question": "Combien de jours pour le décès d'un parent ?",
+     "expected_status": "answered", "expected_documents": ["politique_conges.txt"], "must_contain": ["3 jours"]},
+    {"id": "hold-07", "category": "simple", "question": "À quelle heure est l'accueil le jour de l'arrivée d'un nouveau ?",
+     "expected_status": "answered", "expected_documents": ["procedure_integration.docx"], "must_contain": ["9 h 30"]},
+    {"id": "hold-08", "category": "simple", "question": "Dans quel délai prévenir les RH d'un arrêt de travail ?",
+     "expected_status": "answered", "expected_documents": ["politique_conges.txt"], "must_contain": ["48 heures"]},
+    {"id": "hold-09", "category": "simple", "question": "Une indemnité est-elle versée aux télétravailleurs ?",
+     "expected_status": "answered", "expected_documents": ["politique_teletravail.txt"], "must_contain": ["10 euros"]},
+    {"id": "hold-10", "category": "simple", "question": "Peut-on annuler une demande de congé déjà déposée ?",
+     "expected_status": "answered", "expected_documents": ["procedure_demande_conge.txt"], "must_contain": ["annulée"]},
+
+    {"id": "hold-11", "category": "no_answer", "question": "Quelle est la procédure en cas de démission ?",
+     "expected_status": "abstained"},
+    {"id": "hold-12", "category": "no_answer", "question": "Combien de jours de RTT ai-je ?",
+     "expected_status": "abstained"},
+    {"id": "hold-13", "category": "no_answer", "question": "Quel est le plafond de remboursement des notes de frais ?",
+     "expected_status": "abstained"},
+    {"id": "hold-14", "category": "no_answer", "question": "Puis-je travailler depuis l'étranger ?",
+     "expected_status": "abstained"},
+    {"id": "hold-15", "category": "no_answer", "question": "Quelle est la durée du préavis pendant la période d'essai ?",
+     "expected_status": "abstained"}
+  ]
+}

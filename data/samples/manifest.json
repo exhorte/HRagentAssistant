@@ -1,0 +1,9 @@
+{
+  "_comment": "Métadonnées du corpus de démonstration. Tous les documents sont synthétiques et sans valeur légale.",
+  "politique_conges.txt": {"version": "2.0", "family": "politique-conges", "status": "active", "access_level": "all"},
+  "procedure_demande_conge.txt": {"version": "1.3", "family": "procedure-demande-conge", "status": "active", "access_level": "all"},
+  "politique_teletravail.txt": {"version": "1.1", "family": "politique-teletravail", "status": "active", "access_level": "all"},
+  "procedure_integration.docx": {"version": "1.0", "family": "procedure-integration", "status": "active", "access_level": "all"},
+  "procedure_attestation.pdf": {"version": "1.2", "family": "procedure-attestation", "status": "active", "access_level": "all"},
+  "grille_remuneration_confidentielle.txt": {"version": "1.0", "family": "grille-remuneration", "status": "active", "access_level": "hr_only"}
+}
