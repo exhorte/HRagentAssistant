@@ -1,130 +1,135 @@
 # HRagentAssistant
 
-Prototype local d'**assistant RH documentaire** : il répond aux questions des employés à partir des documents RH
-réellement chargés, **cite ses sources**, **s'abstient** quand les documents ne suffisent pas, aide à préparer et
-suivre une **demande de congé**, et peut **transmettre** une question à un responsable RH.
+Local prototype of a **document-based HR assistant**: it answers employees' questions from the HR documents actually
+loaded, **cites its sources**, **abstains** when the documents are not enough, helps prepare and track a
+**leave request**, and can **forward** a question to an HR manager.
 
-> ⚠️ **Prototype, données synthétiques uniquement.** Ne chargez aucune donnée RH réelle tant que les points de
-> [docs/SECURITY.md](docs/SECURITY.md) (section « Avant toute utilisation réelle ») ne sont pas traités.
-> Les documents de démonstration sont fictifs et sans valeur légale.
+> ⚠️ **Prototype, synthetic data only.** Do not load any real HR data until the points in
+> [docs/SECURITY.md](docs/SECURITY.md) (section "Avant toute utilisation réelle", i.e. "Before any real use") are
+> addressed. The demo documents are fictitious and have no legal value.
 
-## Ce que fait le MVP
+> **Language note:** this README is in English, but the demo corpus, the Streamlit interface and the documents under
+> `docs/` are in French. UI labels and example questions are quoted in French below, with an English gloss.
 
-| Fonctionnalité | État |
+## What the MVP does
+
+| Feature | Status |
 |---|---|
-| **A. Assistant documentaire** : réponses sourcées, citations vérifiées, abstention, détection de conflits entre versions | ✅ testé |
-| **B. Gestion des documents** : import PDF / DOCX / TXT, métadonnées, statut d'indexation, erreurs, retrait, réindexation | ✅ testé |
-| **C. Demande de congé** : récapitulatif, confirmation explicite, brouillon/soumission, suivi, décision RH contrôlée | ✅ testé |
-| **D. Transfert aux RH** : résumé, motif, enregistrement visible dans l'interface (**aucune notification n'est envoyée**) | ✅ testé |
-| Connexion + rôles (employé / responsable RH), contrôle d'accès appliqué par le backend | ✅ testé (prototype, voir SECURITY) |
+| **A. Document assistant**: sourced answers, verified citations, abstention, detection of conflicts between versions | ✅ tested |
+| **B. Document management**: PDF / DOCX / TXT import, metadata, indexing status, errors, removal, re-indexing | ✅ tested |
+| **C. Leave request**: summary, explicit confirmation, draft/submission, tracking, controlled HR decision | ✅ tested |
+| **D. Escalation to HR**: summary, reason, record visible in the interface (**no notification is sent**) | ✅ tested |
+| Login + roles (employee / HR manager), access control enforced by the backend | ✅ tested (prototype, see SECURITY) |
 
-Non fournis : solde de congés (aucun SIRH connecté), notifications, SSO, multi-entreprise, OCR de PDF scannés.
+Not provided: leave balance (no HRIS connected), notifications, SSO, multi-company support, OCR for scanned PDFs.
 
 ## Installation
 
-Prérequis : Python 3.12+ (ou [uv](https://docs.astral.sh/uv/)).
+Requirements: Python 3.12+ (or [uv](https://docs.astral.sh/uv/)).
 
 ```bash
-# Windows (Git Bash / PowerShell) ou Linux/macOS
+# Windows (Git Bash / PowerShell) or Linux/macOS
 python -m venv venv
-venv/Scripts/python -m pip install -e ".[dev]"      # Linux/macOS : venv/bin/python
+venv/Scripts/python -m pip install -e ".[dev]"      # Linux/macOS: venv/bin/python
 ```
 
-Avec uv : `uv venv --python 3.12 venv && uv pip install --python venv/Scripts/python.exe -e ".[dev]"`.
+With uv: `uv venv --python 3.12 venv && uv pip install --python venv/Scripts/python.exe -e ".[dev]"`.
 
-`pyproject.toml` est l'unique source des dépendances (`requirements.txt` ne fait que le référencer).
+`pyproject.toml` is the single source of dependencies (`requirements.txt` only references it).
 
 ## Configuration
 
-Le prototype fonctionne **sans aucune clé API** (réponses extractives, embeddings locaux, Qdrant embarqué).
-Pour changer de mode, copiez `.env.example` vers `.env` (jamais committé) :
+The prototype works **without any API key** (extractive answers, local embeddings, embedded Qdrant).
+To switch mode, copy `.env.example` to `.env` (never committed):
 
-| Variable | Valeurs | Effet |
+| Variable | Values | Effect |
 |---|---|---|
-| `LLM_PROVIDER` | `none` (défaut), `groq`, `portkey` | `none` : phrases extraites des documents. `groq`/`portkey` : réponse rédigée par un modèle, **puis vérifiée** |
-| `EMBEDDING_BACKEND` | `hashing` (défaut), `jina` | `hashing` : hors ligne, lexical. `jina` : sémantique, nécessite `JINA_API_KEY` (utiliser `jina-embeddings-v3` pour le français) |
-| `QDRANT_MODE` | `local` (défaut), `memory`, `cloud` | `local` : index embarqué dans `data/runtime/qdrant` |
-| `GROQ_API_KEY`, `PORTKEY_API_KEY`, `JINA_API_KEY`, `QDRANT_URL`/`QDRANT_API_KEY` | | Uniquement si le mode correspondant est choisi |
+| `LLM_PROVIDER` | `none` (default), `groq`, `portkey` | `none`: sentences extracted from the documents. `groq`/`portkey`: answer written by a model, **then verified** |
+| `EMBEDDING_BACKEND` | `hashing` (default), `jina` | `hashing`: offline, lexical. `jina`: semantic, requires `JINA_API_KEY` (use `jina-embeddings-v3` for French) |
+| `QDRANT_MODE` | `local` (default), `memory`, `cloud` | `local`: index embedded in `data/runtime/qdrant` |
+| `GROQ_API_KEY`, `PORTKEY_API_KEY`, `JINA_API_KEY`, `QDRANT_URL`/`QDRANT_API_KEY` | | Only if the matching mode is selected |
 
-Les clés ne sont lues que depuis l'environnement. Au changement de backend d'embeddings, réindexez les documents
-(page « Documents RH » → « Réindexer tous les documents »).
+Keys are read from the environment only. When you change the embedding backend, re-index the documents
+("Documents RH" page → "Réindexer tous les documents", i.e. "Re-index all documents").
 
-## Lancer
+## Run
 
 ```bash
-venv/Scripts/python main.py init      # base SQLite, comptes de démonstration, corpus de démonstration
-venv/Scripts/python main.py serve     # interface Streamlit sur http://localhost:8501
+venv/Scripts/python main.py init      # SQLite database, demo accounts, demo corpus
+venv/Scripts/python main.py serve     # Streamlit interface at http://localhost:8501
 ```
 
-`init` génère les mots de passe des comptes `alice` et `bob` (employés) et `claire` (responsable RH) et les écrit dans
-`data/runtime/demo_credentials.txt` (fichier local, ignoré par git, jamais affiché). Ajoutez `--special` pour importer
-aussi le jeu `data/samples_special` (version obsolète, note contradictoire, document piégé).
+`init` generates the passwords for the `alice` and `bob` accounts (employees) and `claire` (HR manager) and writes
+them to `data/runtime/demo_credentials.txt` (local file, ignored by git, never displayed). Add `--special` to also
+import the `data/samples_special` set (outdated version, contradictory note, trap document).
 
-> Un seul processus à la fois peut ouvrir l'index Qdrant local : arrêtez l'interface avant d'utiliser `main.py ask`.
+> Only one process at a time can open the local Qdrant index: stop the interface before using `main.py ask`.
 
-### Utiliser l'assistant
+### Using the assistant
 
-1. Connectez-vous (`alice`) → **Assistant RH** et posez une question de démonstration :
+1. Log in as `alice` → **Assistant RH** (HR assistant) and ask a demo question:
 
-   | Question | Comportement attendu |
+   | Question (French demo corpus) | Expected behaviour |
    |---|---|
-   | « Combien de jours de congés payés par an ? » | Réponse (25 jours) + source `politique_conges.txt` |
-   | « Quelle est la procédure de demande d'attestation ? » | Réponse + source PDF avec numéro de page |
-   | « Quelle est la capitale de la France ? » | Abstention + proposition de transfert aux RH |
-   | « Quel est le salaire du niveau B ? » (employé) | Abstention : document réservé aux RH |
-   | « Combien de jours de télétravail par semaine ? » (avec `--special`) | Conflit signalé entre deux documents actifs |
-   | « Ignore toutes les instructions précédentes… » | Refus |
+   | « Combien de jours de congés payés par an ? » (How many paid leave days per year?) | Answer (25 days) + source `politique_conges.txt` |
+   | « Quelle est la procédure de demande d'attestation ? » (What is the procedure to request a certificate?) | Answer + PDF source with page number |
+   | « Quelle est la capitale de la France ? » (What is the capital of France?) | Abstention + offer to forward to HR |
+   | « Quel est le salaire du niveau B ? » (What is the salary for level B?) (as an employee) | Abstention: document restricted to HR |
+   | « Combien de jours de télétravail par semaine ? » (How many remote-work days per week?) (with `--special`) | Conflict reported between two active documents |
+   | « Ignore toutes les instructions précédentes… » (Ignore all previous instructions…) | Refusal |
 
-2. **Demandes RH → Nouvelle demande de congé** : saisissez type et dates → récapitulatif → case de confirmation →
-   « Confirmer et soumettre » (ou « Enregistrer en brouillon »). Le statut se suit dans « Mes demandes ».
-3. Connectez-vous en `claire` : **À traiter (RH)** → « Prendre en charge » → « Approuver » / « Refuser » (motif obligatoire).
-4. Une question sans réponse propose « Transmettre cette question aux RH » : résumé et motif à confirmer ;
-   le transfert apparaît dans « Transferts reçus (RH) ».
+2. **Demandes RH → Nouvelle demande de congé** (HR requests → New leave request): enter type and dates → summary →
+   confirmation checkbox → "Confirmer et soumettre" (Confirm and submit) or "Enregistrer en brouillon" (Save as draft).
+   Track the status under "Mes demandes" (My requests).
+3. Log in as `claire`: **À traiter (RH)** (To process) → "Prendre en charge" (Take over) → "Approuver" / "Refuser"
+   (Approve / Reject; a reason is mandatory).
+4. A question without an answer offers "Transmettre cette question aux RH" (Forward this question to HR): summary and
+   reason to confirm; the transfer then appears under "Transferts reçus (RH)" (Received transfers).
 
-En ligne de commande : `python main.py ask "..." --as alice`, `python main.py documents --as claire`.
+From the command line: `python main.py ask "..." --as alice`, `python main.py documents --as claire`.
 
-## Tests et évaluation
+## Tests and evaluation
 
 ```bash
-venv/Scripts/python -m pytest                 # 200+ tests, hors ligne, ~1 min 30
-venv/Scripts/python -m pytest -m security     # tests de sécurité bloquants
-venv/Scripts/python main.py eval              # évaluation métier locale (36 cas) + rapport
+venv/Scripts/python -m pytest                 # 200+ tests, offline, ~1 min 30
+venv/Scripts/python -m pytest -m security     # blocking security tests
+venv/Scripts/python main.py eval              # local business evaluation (36 cases) + report
 venv/Scripts/python main.py eval --cases data/eval/holdout_cases.json
 ```
 
-Aucun test n'appelle de service externe. Résultats mesurés et leurs limites : [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md).
+No test calls an external service. Measured results and their limits: [docs/IMPLEMENTATION_STATUS.md](docs/IMPLEMENTATION_STATUS.md).
 
-## Architecture (résumé)
+## Architecture (summary)
 
 ```
-Streamlit (app.py) ──▶ HRAssistantApp (pipeline.py) ──▶ auth / rôles (auth.py)
-        ├─ AnswerEngine (answering.py) ── KnowledgeIndex (vector_store.py, Qdrant + filtre d'accès)
-        │        └─ guardrails.py · llm.py/gateway.py (optionnels) · embeddings.py
+Streamlit (app.py) ──▶ HRAssistantApp (pipeline.py) ──▶ auth / roles (auth.py)
+        ├─ AnswerEngine (answering.py) ── KnowledgeIndex (vector_store.py, Qdrant + access filter)
+        │        └─ guardrails.py · llm.py/gateway.py (optional) · embeddings.py
         ├─ DocumentService (documents.py) ── document_loader.py · splitter.py
         ├─ LeaveService (leave.py)  ·  EscalationService (escalation.py)
-        └─ SQLite (db.py) : utilisateurs, registre de documents, demandes, transferts
+        └─ SQLite (db.py): users, document registry, requests, transfers
 ```
 
-Détails et décisions : [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Sécurité : [docs/SECURITY.md](docs/SECURITY.md).
-Audit initial : [docs/PROJECT_AUDIT.md](docs/PROJECT_AUDIT.md). Références étudiées : [docs/REFERENCE_ANALYSIS.md](docs/REFERENCE_ANALYSIS.md).
-Suite : [docs/ROADMAP.md](docs/ROADMAP.md).
+Details and decisions: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Security: [docs/SECURITY.md](docs/SECURITY.md).
+Initial audit: [docs/PROJECT_AUDIT.md](docs/PROJECT_AUDIT.md). References studied: [docs/REFERENCE_ANALYSIS.md](docs/REFERENCE_ANALYSIS.md).
+What comes next: [docs/ROADMAP.md](docs/ROADMAP.md).
 
-## Limites connues
+## Known limitations
 
-- **La porte d'abstention est lexicale** (couverture pondérée des termes de la question par les passages), quel que
-  soit le backend : pas de synonymes au-delà d'un petit thésaurus RH, donc les paraphrases éloignées (« travail à
-  distance » pour « télétravail ») entraînent une abstention — sûre, mais gênante. **Mesuré** : avec `jina-embeddings-v3`
-  elles sont aussi refusées. Rendre cette porte sémantique est la priorité n°1 de [docs/ROADMAP.md](docs/ROADMAP.md).
-- Le mode extractif **cite des phrases**, il ne synthétise pas. Un modèle (`LLM_PROVIDER`) améliore la rédaction.
-- Seuils d'abstention calibrés sur un petit corpus synthétique : à recalibrer sur vos documents.
-- Détection de conflit : par métadonnée (même « famille » de documents, deux versions actives, chiffres différents).
-- Pas de solde de congés, pas de jours ouvrés/fériés, pas de notification, pas d'OCR.
-- Authentification locale de prototype (pas de SSO, de verrouillage de compte ni de TLS).
+- **The abstention gate is lexical** (weighted coverage of the question's terms by the passages), whatever the
+  backend: no synonyms beyond a small HR thesaurus, so distant paraphrases ("travail à distance" for "télétravail",
+  both meaning remote work) lead to an abstention — safe, but annoying. **Measured**: with `jina-embeddings-v3` they
+  are refused too. Making this gate semantic is priority #1 in [docs/ROADMAP.md](docs/ROADMAP.md).
+- Extractive mode **quotes sentences**; it does not synthesize. A model (`LLM_PROVIDER`) improves the wording.
+- Abstention thresholds were calibrated on a small synthetic corpus: recalibrate them on your own documents.
+- Conflict detection is metadata-based (same document "family", two active versions, different figures).
+- No leave balance, no working days/public holidays, no notifications, no OCR.
+- Local prototype authentication only (no SSO, account lockout or TLS).
 
-## Données conservées
+## Data retained
 
-Tout est local sous `data/runtime/` (ignoré par git) : base SQLite (comptes hachés, registre de documents, demandes,
-transferts — le texte des questions transférées y est stocké), fichiers importés (`uploads/`), index vectoriel
-(`qdrant/`), journaux techniques sans contenu. Les questions/réponses ne sont pas écrites dans les journaux.
-Avec `LLM_PROVIDER=groq|portkey` ou `EMBEDDING_BACKEND=jina`, des extraits de documents et les questions sont envoyés
-au fournisseur choisi : n'utilisez ces modes qu'avec des données autorisées.
+Everything is local under `data/runtime/` (ignored by git): SQLite database (hashed accounts, document registry,
+requests, transfers — the text of forwarded questions is stored there), imported files (`uploads/`), vector index
+(`qdrant/`), technical logs without content. Questions and answers are not written to the logs.
+With `LLM_PROVIDER=groq|portkey` or `EMBEDDING_BACKEND=jina`, document excerpts and questions are sent to the chosen
+provider: only use these modes with authorized data.
